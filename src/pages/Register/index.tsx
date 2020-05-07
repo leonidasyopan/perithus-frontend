@@ -67,20 +67,29 @@ const Register: React.FC = () => {
 
   const onSubmit = useCallback(
     async (data: RegisterFormData | any) => {
-      const dataToRegister = {
-        email: data.email,
-        username: data.username,
-        password: data.password,
-      };
+      try {
+        const dataToRegister = {
+          email: data.email,
+          username: data.username,
+          password: data.password,
+        };
 
-      await api.post(`usuario/cadastro`, dataToRegister);
-      history.push('/');
+        await api.post(`usuario/cadastro`, dataToRegister);
+        history.push('/');
 
-      addToast({
-        type: 'success',
-        title: 'Cadastro realizado!',
-        description: 'Você já pode fazer seu login.',
-      });
+        // addToast({
+        //   type: 'success',
+        //   title: 'Cadastro realizado!',
+        //   description: 'Você já pode fazer seu login.',
+        // });
+      } catch (err) {
+        // addToast({
+        //   type: 'error',
+        //   title: 'Erro no cadastro.',
+        //   description:
+        //     'Ocorreu um erro ao tentar se cadastrar. Tente novamente!',
+        // });
+      }
     },
     [addToast, history],
   );

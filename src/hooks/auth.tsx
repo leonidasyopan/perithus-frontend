@@ -12,8 +12,8 @@ interface LoginCredentials {
 
 interface AuthContextData {
   username: string;
-  login(credentials: LoginCredentials): Promise<void>;
-  logout(): void;
+  loginFunction(credentials: LoginCredentials): Promise<void>;
+  logoutFunction(): void;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -29,7 +29,7 @@ const AuthProvider: React.FC = ({ children }) => {
     return {} as AuthState;
   });
 
-  const login = useCallback(async ({ email, password }) => {
+  const loginFunction = useCallback(async ({ email, password }) => {
     const response = await api.post('usuario/login', {
       email,
       password,
@@ -42,7 +42,7 @@ const AuthProvider: React.FC = ({ children }) => {
     setUserData({ username });
   }, []);
 
-  const logout = useCallback(() => {
+  const logoutFunction = useCallback(() => {
     localStorage.removeItem('@Perithus:username');
 
     setUserData({} as AuthState);
@@ -50,7 +50,7 @@ const AuthProvider: React.FC = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ username: userData.username, login, logout }}
+      value={{ username: userData.username, loginFunction, logoutFunction }}
     >
       {children}
     </AuthContext.Provider>

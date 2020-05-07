@@ -1,4 +1,5 @@
 import React, { useCallback, useRef } from 'react';
+import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 import { useAuth } from '../../hooks/auth';
 
@@ -57,24 +58,27 @@ interface LoginFormData {
 
 const Login: React.FC = () => {
   const classes = useStyles();
-
-  const { login } = useAuth();
+  const { loginFunction } = useAuth();
   const history = useHistory();
 
-  const handleLogin = useCallback(
-    async (data: LoginFormData) => {
+  const { register, handleSubmit } = useForm();
+
+  const onSubmit = useCallback(
+    async (data: LoginFormData | any) => {
       try {
-        // await login({
-        //   email: data.email,
-        //   password: data.password,
-        // });
+        await loginFunction({
+          email: data.email,
+          password: data.password,
+        });
+
+        console.log(data);
 
         history.push('/dashboard');
       } catch (err) {
         console.log(err);
       }
     },
-    [login, history],
+    [loginFunction, history],
   );
 
   return (
@@ -87,8 +91,13 @@ const Login: React.FC = () => {
         <Typography component="h1" variant="h5">
           Faça Seu Login
         </Typography>
-        <form className={classes.form} noValidate>
+        <form
+          className={classes.form}
+          noValidate
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <TextField
+            type="email"
             variant="outlined"
             margin="normal"
             required
@@ -98,6 +107,10 @@ const Login: React.FC = () => {
             name="email"
             autoComplete="email"
             autoFocus
+            inputRef={register({
+              required: true,
+              pattern: /[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$/,
+            })}
           />
           <TextField
             variant="outlined"
@@ -109,6 +122,7 @@ const Login: React.FC = () => {
             type="password"
             id="password"
             autoComplete="current-password"
+            inputRef={register({ required: true })}
           />
 
           <Button
