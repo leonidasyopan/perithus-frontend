@@ -1,6 +1,7 @@
 import React, { useCallback, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useAuth } from '../../hooks/auth';
+import Button from '@material-ui/core/Button';
 
 interface LoginFormData {
   email: string;
@@ -8,10 +9,6 @@ interface LoginFormData {
 }
 
 const Login: React.FC = () => {
-  // const onFinish = values => {
-  //   console.log('Received values of form: ', values);
-  // };
-
   const { login } = useAuth();
   const history = useHistory();
 
@@ -31,7 +28,11 @@ const Login: React.FC = () => {
     [login, history],
   );
 
-  return <h1>Login</h1>;
+  return (
+    <Button variant="contained" color="primary">
+      Bem-vindo
+    </Button>
+  );
 };
 
 export default Login;
