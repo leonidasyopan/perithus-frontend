@@ -1,7 +1,8 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useState } from 'react';
+import api from '../../services/api';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
-import { useAuth } from '../../hooks/auth';
+// import { useAuth } from '../../hooks/auth';
 
 // Material UI imports:
 import Avatar from '@material-ui/core/Avatar';
@@ -58,27 +59,36 @@ interface LoginFormData {
 
 const Login: React.FC = () => {
   const classes = useStyles();
-  const { loginFunction } = useAuth();
+  // const { loginFunction } = useAuth();
   const history = useHistory();
 
   const { register, handleSubmit } = useForm();
 
+  const [loginInfo, setLoginInfo] = useState('');
+
   const onSubmit = useCallback(
     async (data: LoginFormData | any) => {
       try {
-        await loginFunction({
+        const dataToLogin = {
           email: data.email,
           password: data.password,
-        });
+        };
 
-        console.log(data);
+        await api.post(`usuario/login`, dataToLogin).then((response) => {
+          localStorage.setItem(
+            '@Perithus:username',
+            JSON.stringify(response.data.username),
+          );
+
+          setLoginInfo(response.data.username);
+        });
 
         history.push('/dashboard');
       } catch (err) {
         console.log(err);
       }
     },
-    [loginFunction, history],
+    [history],
   );
 
   return (

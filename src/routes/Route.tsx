@@ -17,8 +17,9 @@ const Route: React.FC<RouteProps> = ({
   component: Component,
   ...rest
 }) => {
-  const { username } = useAuth();
+  // const { username } = useAuth();
   // const username = 'username';
+  const username = localStorage.getItem('@Perithus:username');
 
   return (
     <ReactDOMRoute
