@@ -1,4 +1,8 @@
 import React from 'react';
+import api from '../../services/api';
+import { useHistory } from 'react-router-dom';
+
+// Imports from Material UI
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,15 +14,18 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
-// import MenuIcon from '@material-ui/icons/Menu';
-// import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import { MdChevronLeft, MdNotifications, MdMenu } from 'react-icons/md';
-// import NotificationsIcon from '@material-ui/icons/Notifications';
+import {
+  MdChevronLeft,
+  MdNotifications,
+  MdMenu,
+  MdExitToApp,
+} from 'react-icons/md';
 // import { mainListItems, secondaryListItems } from './listItems';
 // import Chart from './Chart';
 // import Deposits from './Deposits';
@@ -119,6 +126,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Dashboard() {
+  const history = useHistory();
+
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -127,6 +136,13 @@ function Dashboard() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const handleExit = () => {
+    localStorage.removeItem('@Perithus:username');
+    api.post(`usuario/logout`);
+    history.push('/');
+  };
+
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
@@ -158,11 +174,13 @@ function Dashboard() {
           >
             Painel de Controle
           </Typography>
-          {/* <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <MdNotifications />
-            </Badge>
-          </IconButton> */}
+          <Button
+            color="inherit"
+            endIcon={<MdExitToApp />}
+            onClick={handleExit}
+          >
+            Sair
+          </Button>
         </Toolbar>
       </AppBar>
       <Drawer
