@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import api from '../../services/api';
 import { useHistory } from 'react-router-dom';
-import { useToast } from '../../hooks/toast';
 
 // Material UI imports:
 import Avatar from '@material-ui/core/Avatar';
@@ -60,7 +59,6 @@ interface RegisterFormData {
 
 const Register: React.FC = () => {
   const classes = useStyles();
-  const { addToast } = useToast();
   const history = useHistory();
 
   const { register, handleSubmit } = useForm();
@@ -76,22 +74,11 @@ const Register: React.FC = () => {
 
         await api.post(`usuario/cadastro`, dataToRegister);
         history.push('/');
-
-        // addToast({
-        //   type: 'success',
-        //   title: 'Cadastro realizado!',
-        //   description: 'Você já pode fazer seu login.',
-        // });
       } catch (err) {
-        // addToast({
-        //   type: 'error',
-        //   title: 'Erro no cadastro.',
-        //   description:
-        //     'Ocorreu um erro ao tentar se cadastrar. Tente novamente!',
-        // });
+        console.log(err);
       }
     },
-    [addToast, history],
+    [history],
   );
 
   return (
