@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useForm } from 'react-hook-form';
+import api from '../../services/api';
+import { useHistory } from 'react-router-dom';
+import { useToast } from '../../hooks/toast';
 
 // Material UI imports:
 import Avatar from '@material-ui/core/Avatar';
@@ -48,8 +52,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+interface RegisterFormData {
+  username: string;
+  email: string;
+  password: string;
+}
+
 const Register: React.FC = () => {
   const classes = useStyles();
+  const { addToast } = useToast();
+  const history = useHistory();
+
+  const { register, handleSubmit } = useForm();
+
+  const onSubmit = useCallback(
+    async (data: RegisterFormData | any) => {
+      const dataToRegister = {
+        email: data.email,
+        username: data.username,
+        password: data.password,
+      };
+
+      await api.post(`usuario/cadastro`, dataToRegister);
+      history.push('/');
+
+      addToast({
+        type: 'success',
+        title: 'Cadastro realizado!',
+        description: 'Você já pode fazer seu login.',
+      });
+    },
+    [addToast, history],
+  );
 
   return (
     <Container component="main" maxWidth="xs">
@@ -61,33 +95,31 @@ const Register: React.FC = () => {
         <Typography component="h1" variant="h5">
           Cadastre-se
         </Typography>
-        <form className={classes.form} noValidate>
+        <form
+          className={classes.form}
+          noValidate
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="Nome"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
                 variant="outlined"
                 required
                 fullWidth
-                id="lastName"
-                label="Sobrenome"
-                name="lastName"
+                id="username"
+                label="Usuário"
+                name="username"
                 autoComplete="lname"
+                inputRef={register({
+                  required: true,
+                  minLength: 4,
+                  maxLength: 20,
+                })}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
+                type="email"
                 variant="outlined"
                 required
                 fullWidth
@@ -95,6 +127,10 @@ const Register: React.FC = () => {
                 label="Endereço de Email"
                 name="email"
                 autoComplete="email"
+                inputRef={register({
+                  required: true,
+                  pattern: /[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$/,
+                })}
               />
             </Grid>
             <Grid item xs={12}>
@@ -107,14 +143,9 @@ const Register: React.FC = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                inputRef={register({ required: true })}
               />
             </Grid>
-            {/* <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid> */}
           </Grid>
           <Button
             type="submit"
