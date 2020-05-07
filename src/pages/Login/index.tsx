@@ -8,8 +8,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-// import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -17,6 +15,7 @@ import { FiLogIn } from 'react-icons/fi';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import FailAlert from '../../toast/FailAlert';
 
 function Copyright() {
   return (
@@ -64,6 +63,8 @@ const Login: React.FC = () => {
 
   const [loginInfo, setLoginInfo] = useState('');
 
+  const [status, setStatusBase] = React.useState(false);
+
   const onSubmit = useCallback(
     async (data: LoginFormData | any) => {
       try {
@@ -84,6 +85,7 @@ const Login: React.FC = () => {
         history.push('/dashboard');
       } catch (err) {
         console.log(err);
+        setStatusBase(true);
       }
     },
     [history],
@@ -91,6 +93,8 @@ const Login: React.FC = () => {
 
   return (
     <Container component="main" maxWidth="xs">
+      {status === true ? <FailAlert /> : null}
+
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>

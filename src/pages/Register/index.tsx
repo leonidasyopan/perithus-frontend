@@ -17,6 +17,7 @@ import { FiUserPlus } from 'react-icons/fi';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import FailAlert from '../../toast/FailAlert';
 
 function Copyright() {
   return (
@@ -63,6 +64,8 @@ const Register: React.FC = () => {
 
   const { register, handleSubmit } = useForm();
 
+  const [status, setStatusBase] = React.useState(false);
+
   const onSubmit = useCallback(
     async (data: RegisterFormData | any) => {
       try {
@@ -76,6 +79,7 @@ const Register: React.FC = () => {
         history.push('/');
       } catch (err) {
         console.log(err);
+        setStatusBase(true);
       }
     },
     [history],
@@ -83,6 +87,8 @@ const Register: React.FC = () => {
 
   return (
     <Container component="main" maxWidth="xs">
+      {status === true ? <FailAlert /> : null}
+
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
