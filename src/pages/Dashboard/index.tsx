@@ -156,13 +156,13 @@ function Dashboard() {
             noWrap
             className={classes.title}
           >
-            Dashboard
+            Painel de Controle
           </Typography>
-          <IconButton color="inherit">
+          {/* <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
               <MdNotifications />
             </Badge>
-          </IconButton>
+          </IconButton> */}
         </Toolbar>
       </AppBar>
       <Drawer
