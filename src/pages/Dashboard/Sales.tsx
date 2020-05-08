@@ -13,15 +13,15 @@ import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
 
 interface DataType {
-  order_id: Number;
-  order_payment: Boolean;
+  sale_id: Number;
+  sale_price_per_product: Number;
   payment_date: Date;
-  order_date: Date;
+  sale_date: Date;
   product_amount: Number;
   product_name: string;
   product_description: string;
   product_price: Number;
-  order_total: Number;
+  sale_total: Number;
 }
 
 function preventDefault(event: any) {
@@ -35,18 +35,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Orders() {
-  const [orders, setOrders] = useState<DataType[]>([]);
-  console.log(orders);
+  const [sales, setSales] = useState<DataType[]>([]);
 
   useEffect(() => {
     async function loadOrders(): Promise<void> {
       const username = localStorage.getItem('@Perithus:username');
-      console.log(username);
-      console.log(`username: ${username}`);
-      await api.get(`pedidos/listar-pedidos/${username}`).then((response) => {
-        console.log(response);
-
-        setOrders(response.data);
+      await api.get(`vendas/listar-vendas/${username}`).then((response) => {
+        setSales(response.data);
       });
     }
 
@@ -56,26 +51,28 @@ export default function Orders() {
   const classes = useStyles();
   return (
     <React.Fragment>
-      <Title>Pedidos Recentes</Title>
+      <Title>Vendas Recentes</Title>
       <Table size="small">
         <TableHead>
           <TableRow>
             <TableCell>Número do Pedido</TableCell>
             <TableCell>Nome do Produto</TableCell>
             <TableCell>Quantidade</TableCell>
-            <TableCell>Preço</TableCell>
+            <TableCell>Preço de Compra</TableCell>
+            <TableCell>Preço de Venda</TableCell>
             <TableCell align="right">Valor Total</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {orders.map((row, index) => (
+          {sales.map((row, index) => (
             <TableRow key={index}>
-              <TableCell>{row.order_id}</TableCell>
+              <TableCell>{row.sale_id}</TableCell>
               <TableCell>{row.product_name}</TableCell>
               <TableCell>{row.product_amount}</TableCell>
+              <TableCell>{row.sale_price_per_product}</TableCell>
               <TableCell>{formatCurrency(Number(row.product_price))}</TableCell>
               <TableCell align="right">
-                {formatCurrency(Number(row.order_total))}
+                {formatCurrency(Number(row.sale_total))}
               </TableCell>
             </TableRow>
           ))}
@@ -83,7 +80,7 @@ export default function Orders() {
       </Table>
       <div className={classes.seeMore}>
         <Link color="primary" href="#" onClick={preventDefault}>
-          Ver mais pedidos
+          Veja mais vendas
         </Link>
       </div>
     </React.Fragment>

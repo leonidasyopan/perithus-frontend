@@ -74,10 +74,7 @@ const Login: React.FC = () => {
         };
 
         await api.post(`usuario/login`, dataToLogin).then((response) => {
-          localStorage.setItem(
-            '@Perithus:username',
-            JSON.stringify(response.data.username),
-          );
+          localStorage.setItem('@Perithus:username', response.data.username);
 
           setLoginInfo(response.data.username);
         });
