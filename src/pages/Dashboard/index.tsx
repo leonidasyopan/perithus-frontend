@@ -15,21 +15,21 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import Badge from '@material-ui/core/Badge';
+// import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import {
   MdChevronLeft,
-  MdNotifications,
+  // MdNotifications,
   MdMenu,
   MdExitToApp,
 } from 'react-icons/md';
-// import { mainListItems, secondaryListItems } from './listItems';
+import { mainListItems, secondaryListItems } from './listItems';
 // import Chart from './Chart';
 // import Deposits from './Deposits';
-// import Orders from './Orders';
+import Orders from './Orders';
 
 function Copyright() {
   return (
@@ -139,7 +139,7 @@ function Dashboard() {
 
   const handleExit = () => {
     localStorage.removeItem('@Perithus:username');
-    api.post(`usuario/logout`);
+    api.get(`usuario/logout`);
     history.push('/');
   };
 
@@ -196,10 +196,10 @@ function Dashboard() {
           </IconButton>
         </div>
         <Divider />
-        {/* <List>{mainListItems}</List> */}
+        <List>{mainListItems}</List>
         <List>{}</List>
         <Divider />
-        {/* <List>{secondaryListItems}</List> */}
+        <List>{secondaryListItems}</List>
         <List>{}</List>
       </Drawer>
       <main className={classes.content}>
@@ -214,9 +214,11 @@ function Dashboard() {
             <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>{/* <Deposits /> */}</Paper>
             </Grid>
-            {/* Recent Orders */}
+            Pedidos recentes
             <Grid item xs={12}>
-              <Paper className={classes.paper}>{/* <Orders /> */}</Paper>
+              <Paper className={classes.paper}>
+                <Orders />
+              </Paper>
             </Grid>
           </Grid>
           <Box pt={4}>
